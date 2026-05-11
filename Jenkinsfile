@@ -1,39 +1,63 @@
 pipeline {
     agent any
 
+    environment {
+        APP_NAME = "api-docker-ci"
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                url: 'https://github.com/jordixia123/trabajo-docker-iso'
+                checkout scm
             }
         }
 
         stage('Debug') {
             steps {
                 sh 'pwd'
-                sh 'find .'
-                sh 'ls -l nginx'
+                sh 'ls -la'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'docker compose build'
+                sh '''
+                    docker compose build
+                '''
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'docker compose up -d'
+                sh '''
+                    docker compose down -v || true
+                    docker compose up -d --build
+                '''
             }
         }
 
         stage('Test') {
             steps {
-                sh 'docker compose ps'
+                sh '''
+                    echo "No tests configurados aún"
+                    # aquí puedes poner: npm test o curl al backend
+                '''
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline terminado'
+        }
+
+        success {
+            echo 'Deploy OK'
+        }
+
+        failure {
+            echo 'Pipeline falló'
         }
     }
 }
