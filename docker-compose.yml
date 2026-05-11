@@ -9,9 +9,7 @@ services:
       - mongo_data:/data/db
 
   api:
-    build:
-      context: ./api
-    container_name: api
+    build: .
     ports:
       - "3000:3000"
     env_file:
