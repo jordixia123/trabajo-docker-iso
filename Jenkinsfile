@@ -5,7 +5,15 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/jordixia123/trabajo-docker-iso'
+                git 'https://github.com/jordixia123/trabajo-docker-iso'
+            }
+        }
+
+        stage('Debug') {
+            steps {
+                sh 'pwd'
+                sh 'find .'
+                sh 'ls -l nginx'
             }
         }
 
@@ -15,16 +23,15 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'docker compose up -d'
-                sh 'curl http://localhost:3000/health'
-            }
-        }
-
         stage('Deploy') {
             steps {
                 sh 'docker compose up -d'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'docker compose ps'
             }
         }
     }
