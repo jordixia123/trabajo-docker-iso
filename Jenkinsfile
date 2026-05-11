@@ -5,7 +5,8 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/jordixia123/trabajo-docker-iso'
+                git branch: 'main',
+                url: 'https://github.com/jordixia123/trabajo-docker-iso'
             }
         }
 
